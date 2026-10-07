@@ -48,10 +48,22 @@
       </div>
     </header>
 
+    <!-- Mobile Navigation Tab Bar (Visible on screens < 992px) -->
+    <nav class="mobile-tab-bar" id="mobile-tab-bar">
+      <button type="button" class="mobile-tab-btn active" id="tab-btn-editor">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Form Input
+      </button>
+      <button type="button" class="mobile-tab-btn" id="tab-btn-preview">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Preview Invoice
+      </button>
+    </nav>
+
     <!-- Main Workspace -->
-    <main class="app-workspace">
+    <main class="app-workspace show-editor" id="app-workspace">
       <!-- Left Panel: Form Input Editor -->
-      <section class="editor-panel">
+      <section class="editor-panel" id="editor-panel">
         <div class="panel-header">
           <h2>Form Data Invoice</h2>
           <p class="panel-subtitle">Edit data invoice, preview akan langsung terupdate otomatis.</p>
@@ -243,7 +255,7 @@
       </section>
 
       <!-- Right Panel: Live Invoice A4 Preview -->
-      <section class="preview-panel">
+      <section class="preview-panel" id="preview-panel">
         <div class="preview-toolbar">
           <div class="toolbar-left">
             <span class="preview-label">Live Preview (A4 Standard)</span>
@@ -380,6 +392,14 @@
         </div>
       </section>
     </main>
+
+    <!-- Mobile Floating Action Switcher Button -->
+    <button type="button" class="mobile-floating-switch" id="mobile-floating-switch" title="Ganti Tampilan">
+      <span id="floating-btn-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </span>
+      <span id="floating-btn-text">Lihat Invoice</span>
+    </button>
   </div>
 
   <script src="app.js"></script>

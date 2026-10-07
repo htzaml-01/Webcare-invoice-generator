@@ -144,7 +144,15 @@ const DOM = {
   previewSignName: document.getElementById('preview-sign-name'),
   previewSignRole: document.getElementById('preview-sign-role'),
   previewFooterAddress: document.getElementById('preview-footer-address'),
-  previewFooterEmail: document.getElementById('preview-footer-email')
+  previewFooterEmail: document.getElementById('preview-footer-email'),
+
+  // Mobile Navigation
+  mobileTabBar: document.getElementById('mobile-tab-bar'),
+  tabBtnEditor: document.getElementById('tab-btn-editor'),
+  tabBtnPreview: document.getElementById('tab-btn-preview'),
+  appWorkspace: document.getElementById('app-workspace'),
+  mobileFloatingSwitch: document.getElementById('mobile-floating-switch'),
+  floatingBtnText: document.getElementById('floating-btn-text')
 };
 
 // ==========================================================================
@@ -155,6 +163,7 @@ function init() {
   bindFormInputs();
   bindActionButtons();
   bindZoomControls();
+  bindMobileNavigation();
   renderItemInputs();
   updateCalculationsAndPreview();
   autoFitPreview();
@@ -162,6 +171,43 @@ function init() {
   window.addEventListener('resize', () => {
     autoFitPreview();
   });
+  window.addEventListener('orientationchange', () => {
+    setTimeout(autoFitPreview, 200);
+  });
+}
+
+function bindMobileNavigation() {
+  if (!DOM.tabBtnEditor || !DOM.tabBtnPreview) return;
+
+  function showEditorTab() {
+    DOM.appWorkspace.className = 'app-workspace show-editor';
+    DOM.tabBtnEditor.classList.add('active');
+    DOM.tabBtnPreview.classList.remove('active');
+    if (DOM.floatingBtnText) DOM.floatingBtnText.textContent = 'Lihat Invoice';
+  }
+
+  function showPreviewTab() {
+    DOM.appWorkspace.className = 'app-workspace show-preview';
+    DOM.tabBtnPreview.classList.add('active');
+    DOM.tabBtnEditor.classList.remove('active');
+    if (DOM.floatingBtnText) DOM.floatingBtnText.textContent = 'Edit Form';
+    setTimeout(() => {
+      autoFitPreview();
+    }, 50);
+  }
+
+  DOM.tabBtnEditor.addEventListener('click', showEditorTab);
+  DOM.tabBtnPreview.addEventListener('click', showPreviewTab);
+
+  if (DOM.mobileFloatingSwitch) {
+    DOM.mobileFloatingSwitch.addEventListener('click', () => {
+      if (DOM.appWorkspace.classList.contains('show-preview')) {
+        showEditorTab();
+      } else {
+        showPreviewTab();
+      }
+    });
+  }
 }
 
 /**
@@ -507,17 +553,28 @@ function bindZoomControls() {
 }
 
 function setZoom(val) {
-  currentZoom = Math.min(Math.max(0.4, val), 1.8);
+  currentZoom = Math.min(Math.max(0.28, val), 1.8);
   DOM.sheetWrapper.style.transform = `scale(${currentZoom})`;
   DOM.zoomText.textContent = `${Math.round(currentZoom * 100)}%`;
+
+  // Adjust bottom margin to eliminate empty vertical whitespace when scaled down on mobile
+  if (currentZoom < 1.0) {
+    const a4HeightPx = 1123;
+    const scaledHeight = a4HeightPx * currentZoom;
+    const diff = a4HeightPx - scaledHeight;
+    DOM.sheetWrapper.style.marginBottom = `-${diff - 16}px`;
+  } else {
+    DOM.sheetWrapper.style.marginBottom = '0px';
+  }
 }
 
 function autoFitPreview() {
   if (!DOM.previewViewport) return;
-  const viewportWidth = DOM.previewViewport.clientWidth - 60;
+  const paddingOffset = window.innerWidth <= 768 ? 20 : 50;
+  const viewportWidth = DOM.previewViewport.clientWidth - paddingOffset;
   // A4 width in px at 96 DPI: 210mm ~ 794px
   const a4Width = 794;
-  if (viewportWidth < a4Width) {
+  if (viewportWidth < a4Width && viewportWidth > 0) {
     const fit = Math.floor((viewportWidth / a4Width) * 100) / 100;
     setZoom(fit);
   } else {
