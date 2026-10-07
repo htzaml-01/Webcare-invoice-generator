@@ -1,0 +1,1200 @@
+/* ==========================================================================
+   Webcare Invoice Studio - Main Stylesheet (Solid Light / White Theme)
+   ========================================================================== */
+
+:root {
+  /* UI Theme Palette - Solid Clean Light / White */
+  --bg-body: #f1f5f9;
+  --bg-header: #ffffff;
+  --bg-panel: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-subtle: #f8fafc;
+  --bg-input: #ffffff;
+  --border-color: #e2e8f0;
+  --border-dark: #cbd5e1;
+  --border-focus: #2563eb;
+  
+  --text-main: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --accent: #059669;
+  --accent-hover: #047857;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --danger-hover: #b91c1c;
+
+  /* Invoice Official Brand Colors (Preserved exactly from PDF) */
+  --inv-navy: #232170;
+  --inv-title-navy: #1d3b63;
+  --inv-gold: #faab1d;
+  --inv-green: #0a7d46;
+  --inv-text: #000000;
+  --inv-grey: #c2c2c2;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   App Layout
+   ========================================================================== */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Top Navigation Bar - Vibrant Webcare Blue (As Requested) */
+.app-header {
+  height: 60px;
+  background: #2b5fe2;
+  border-bottom: 1px solid #1f4fc8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(32, 78, 196, 0.25);
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.brand-logo-img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.brand-text h1 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  color: #ffffff;
+}
+
+.badge-tag {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+  display: block;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Navbar Buttons - High-contrast on Blue */
+.btn-nav-reset {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+.btn-nav-reset:hover {
+  background: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #ffffff;
+}
+
+.btn-nav-print {
+  background: #ffffff;
+  color: #2b5fe2;
+  border: 1px solid #ffffff;
+  font-weight: 700;
+}
+.btn-nav-print:hover {
+  background: #f0f5ff;
+  color: #1e45b0;
+}
+
+.btn-nav-pdf {
+  background: #10b981;
+  color: #ffffff;
+  border: 1px solid #10b981;
+  font-weight: 700;
+}
+.btn-nav-pdf:hover {
+  background: #059669;
+  border-color: #059669;
+}
+
+/* Common Solid Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  user-select: none;
+}
+
+.btn-secondary {
+  background: #ffffff;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-dark);
+}
+.btn-secondary:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: var(--text-main);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #ffffff;
+  border: 1px solid var(--primary);
+}
+.btn-primary:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: #ffffff;
+  border: 1px solid var(--accent);
+}
+.btn-accent:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.btn-sm {
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 6px;
+}
+
+.btn-outline-primary {
+  background: #ffffff;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+.btn-outline-primary:hover {
+  background: #eff6ff;
+}
+
+/* ==========================================================================
+   Workspace Layout (Split Panel)
+   ========================================================================== */
+.app-workspace {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 460px 1fr;
+  height: calc(100vh - 60px);
+  overflow: hidden;
+}
+
+/* Left Editor Panel - Blue Graphic Background (As Requested) */
+.editor-panel {
+  background-color: #0f3ba8;
+  background-image: url('assets/form_bg_graphic.jpg');
+  background-position: center top;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.panel-header {
+  padding: 16px 24px 14px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #ffffff;
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.panel-header h2 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.panel-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.editor-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: transparent;
+}
+
+/* Scrollbar styling on graphic background */
+.editor-scroll::-webkit-scrollbar,
+.preview-viewport::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+.editor-scroll::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.15);
+}
+.preview-viewport::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+.editor-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 4px;
+}
+.editor-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+.preview-viewport::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.preview-viewport::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Card Sections - Solid White Floating Cards over Graphic */
+.card-section {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 4px 16px rgba(10, 30, 80, 0.16);
+}
+
+.card-section.highlight-card {
+  background: #ffffff;
+  border: 2px solid #2563eb;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.22);
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.card-title svg {
+  color: var(--primary);
+}
+
+.card-title h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.card-title-split {
+  justify-content: space-between;
+}
+.card-title-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Form Controls - Solid Inputs */
+.form-group {
+  margin-bottom: 12px;
+}
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 9px 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-dark);
+  border-radius: 6px;
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-control::placeholder {
+  color: #94a3b8;
+}
+
+.form-control:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.form-control-sm {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.input-prefix-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-prefix {
+  position: absolute;
+  left: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  pointer-events: none;
+}
+
+.input-prefix-wrapper .form-control {
+  padding-left: 38px;
+}
+
+.input-large {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1d4ed8;
+}
+
+.helper-text {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: block;
+  margin-top: 4px;
+}
+
+.form-grid {
+  display: grid;
+  gap: 10px;
+}
+.grid-2 {
+  grid-template-columns: 1fr 1fr;
+}
+.grid-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.form-title-sub {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin: 14px 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Items List in Editor */
+.items-editor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item-row-card {
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.item-row-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.item-row-bottom {
+  display: grid;
+  grid-template-columns: 80px 1fr 28px;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-remove-item {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: #fef2f2;
+  color: var(--danger);
+  border: 1px solid #fecaca;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.btn-remove-item:hover {
+  background: var(--danger);
+  color: #ffffff;
+  border-color: var(--danger);
+}
+
+/* Quick payment chips - Solid Light */
+.quick-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.btn-chip {
+  background: #ffffff;
+  border: 1px solid var(--border-dark);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.btn-chip:hover {
+  background: #eff6ff;
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Summary Box - Solid */
+.summary-box {
+  background: #ffffff;
+  border: 1px solid var(--border-dark);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summary-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.summary-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+/* Real-time Status Card - Solid Alert Colors */
+.status-card {
+  margin-top: 14px;
+  border-radius: 8px;
+  padding: 12px 14px;
+  border: 1px solid transparent;
+}
+
+.status-paid {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+}
+.status-paid .status-dot {
+  background: #10b981;
+}
+.status-paid #status-title {
+  color: #065f46;
+}
+
+.status-pending {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+}
+.status-pending .status-dot {
+  background: #f59e0b;
+}
+.status-pending #status-title {
+  color: #92400e;
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.text-paid {
+  color: #047857;
+}
+.text-unpaid {
+  color: #b45309;
+}
+
+.status-note {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed #cbd5e1;
+  line-height: 1.4;
+}
+
+/* Accordion Hint */
+.accordion-hint {
+  font-size: 11px;
+  color: var(--primary);
+  margin-left: auto;
+}
+
+/* ==========================================================================
+   Right Panel: Invoice Preview Viewport - Clean Neutral Desk
+   ========================================================================== */
+.preview-panel {
+  background: #e2e8f0; /* Solid light desk grey */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.preview-toolbar {
+  height: 48px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 10;
+}
+
+.preview-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-main);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.zoom-indicator {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-left: 8px;
+  padding: 2px 6px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-icon {
+  background: #ffffff;
+  border: 1px solid var(--border-dark);
+  color: var(--text-secondary);
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  transition: background-color 0.15s ease;
+}
+.btn-icon:hover {
+  background: #f1f5f9;
+  color: var(--text-main);
+}
+
+.preview-viewport {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px 80px;
+}
+
+.a4-sheet-wrapper {
+  transform-origin: top center;
+  transition: transform 0.15s ease-out;
+}
+
+/* ==========================================================================
+   THE EXACT A4 INVOICE SHEET (1-to-1 Match with PDF)
+   Dimensions: 210mm x 297mm (Standard A4)
+   ========================================================================== */
+.invoice-a4 {
+  width: 210mm;
+  min-height: 297mm;
+  height: 297mm;
+  background: #ffffff;
+  color: #000000;
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+/* 1. Top Bar (Navy #232170) */
+.inv-top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 9.5mm; /* approx 27pt in PDF */
+  background-color: var(--inv-navy);
+  z-index: 5;
+}
+
+/* 2. Left Ribbon (Navy #232170) */
+.inv-left-ribbon {
+  position: absolute;
+  left: 0;
+  top: 60.5mm; /* ~172pt in PDF */
+  width: 7.6mm;  /* ~21.4pt in PDF */
+  height: 39.2mm; /* ~111pt in PDF */
+  background-color: var(--inv-navy);
+  z-index: 5;
+}
+
+/* 3. Header Section (Logo + Webcare Company Info) */
+.inv-header {
+  margin-top: 14mm;
+  padding-left: 10mm;
+  padding-right: 21mm;
+  display: flex;
+  align-items: center;
+  gap: 6mm;
+}
+
+.inv-logo-box {
+  width: 44mm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inv-logo-img {
+  width: 100%;
+  max-width: 44mm;
+  height: auto;
+  object-fit: contain;
+}
+
+.inv-company-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.inv-company-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16pt;
+  font-weight: 600;
+  color: var(--inv-title-navy);
+  line-height: 1.25;
+  margin-bottom: 2mm;
+}
+
+.inv-company-item {
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5pt;
+  font-weight: 400;
+  color: #000000;
+  line-height: 1.35;
+}
+
+/* 4. Invoice Number, Date & Kepada Section */
+.inv-meta-row {
+  margin-top: 14.5mm;
+  padding-left: 21mm;
+  padding-right: 21mm;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.inv-meta-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.inv-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 28.5pt;
+  font-weight: 600;
+  color: var(--inv-title-navy);
+  letter-spacing: 0.3px;
+  line-height: 1.1;
+  margin-bottom: 4mm;
+}
+
+.inv-number {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14pt;
+  font-weight: 500;
+  color: #000000;
+  line-height: 1.4;
+}
+
+.inv-date {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14pt;
+  font-weight: 500;
+  color: #000000;
+  line-height: 1.4;
+}
+
+.inv-meta-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  padding-top: 13.5mm;
+}
+
+.inv-to-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13pt;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 1.5mm;
+}
+
+.inv-to-name,
+.inv-to-company,
+.inv-to-contact {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13pt;
+  font-weight: 300;
+  color: #000000;
+  line-height: 1.4;
+}
+
+/* 5. Items Table */
+.inv-table-section {
+  margin-top: 10mm;
+  padding-left: 21mm;
+  padding-right: 21mm;
+}
+
+.inv-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 1.2pt solid var(--inv-gold);
+}
+
+.inv-table thead tr {
+  border-bottom: 1.2pt solid var(--inv-gold);
+}
+
+.inv-table th {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13pt;
+  font-weight: 600;
+  color: #000000;
+  padding: 3mm 1mm;
+}
+
+.inv-table th.th-desc {
+  text-align: left;
+  padding-left: 3.5mm;
+  width: 48%;
+}
+
+.inv-table th.th-qty {
+  text-align: center;
+  width: 16%;
+}
+
+.inv-table th.th-price {
+  text-align: right;
+  padding-right: 4mm;
+  width: 18%;
+}
+
+.inv-table th.th-total {
+  text-align: right;
+  padding-right: 3.5mm;
+  width: 18%;
+}
+
+.inv-table tbody tr {
+  height: 8.5mm;
+}
+
+.inv-table td {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11pt;
+  font-weight: 300;
+  color: #000000;
+  padding: 1.5mm 1mm;
+  vertical-align: middle;
+}
+
+.inv-table td.td-desc {
+  text-align: left;
+  padding-left: 3.5mm;
+}
+
+.inv-table td.td-qty {
+  text-align: center;
+}
+
+.inv-table td.td-price {
+  text-align: right;
+  padding-right: 4mm;
+}
+
+.inv-table td.td-total {
+  text-align: right;
+  padding-right: 3.5mm;
+}
+
+/* Under Table Border (Golden line below last row) */
+.inv-table tbody {
+  border-bottom: 1.2pt solid var(--inv-gold);
+}
+
+/* 6. Totals Section */
+.inv-totals-section {
+  margin-top: 3.5mm;
+  padding-right: 21mm;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.inv-totals-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8mm;
+  min-width: 70mm;
+}
+
+.totals-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10mm;
+}
+
+.totals-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13pt;
+  font-weight: 600;
+  color: #000000;
+  text-align: right;
+  flex: 1;
+}
+
+.totals-val {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13pt;
+  font-weight: 600;
+  color: #000000;
+  text-align: right;
+  min-width: 38mm;
+}
+
+/* Sudah Di bayar in Forest Green (#0a7d46) */
+.paid-row .paid-text {
+  color: var(--inv-green);
+}
+
+/* Unpaid / Kurang row */
+.unpaid-row {
+  display: flex;
+}
+
+/* 7. Bottom Section (Bank Account + Signature) */
+.inv-bottom-section {
+  position: absolute;
+  bottom: 30mm;
+  left: 21mm;
+  right: 21mm;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+/* Bank Account Details */
+.inv-bank-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.bank-heading {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13pt;
+  font-weight: 600;
+  color: var(--inv-gold);
+  margin-bottom: 1.5mm;
+}
+
+.bank-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13pt;
+  font-weight: 300;
+  color: #000000;
+  line-height: 1.45;
+}
+
+/* Signature & Stamp Box */
+.inv-sig-box {
+  width: 60mm;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.sig-company-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13pt;
+  font-weight: 300;
+  color: #000000;
+  margin-bottom: 1mm;
+}
+
+.sig-stamp-wrapper {
+  position: relative;
+  width: 58mm;
+  height: 31mm;
+}
+
+.sig-stamp-img {
+  position: absolute;
+  top: 1mm;
+  left: 5mm;
+  width: 27mm;
+  height: auto;
+  opacity: 0.95;
+  z-index: 1;
+}
+
+.sig-signature-img {
+  position: absolute;
+  top: 3mm;
+  left: 10mm;
+  width: 39mm;
+  height: auto;
+  z-index: 2;
+}
+
+.sig-person-name {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13pt;
+  font-weight: 300;
+  color: #000000;
+  line-height: 1.25;
+}
+
+.sig-person-role {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13pt;
+  font-weight: 300;
+  color: #000000;
+  line-height: 1.25;
+}
+
+/* 8. Footer (Navy Bar with angled cut and grey polygon accent) */
+.inv-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 18.5mm; /* ~53pt */
+  background: var(--inv-navy);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 21mm 0 12mm;
+  z-index: 5;
+  overflow: hidden;
+}
+
+/* Angled cut with grey edge at bottom right corner */
+.inv-footer::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 25mm;
+  background: var(--inv-grey);
+  clip-path: polygon(100% 0, 0 100%, 100% 100%);
+  pointer-events: none;
+}
+
+.footer-left {
+  font-family: 'Poppins', sans-serif;
+  font-size: 9pt;
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1.4;
+  z-index: 2;
+}
+
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-right: 28mm;
+  z-index: 2;
+}
+
+.footer-email-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 9pt;
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.footer-email-val {
+  font-family: 'Poppins', sans-serif;
+  font-size: 9pt;
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+/* ==========================================================================
+   PRINT STYLESHEET (@media print)
+   ========================================================================== */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide entire app UI */
+  .app-header,
+  .editor-panel,
+  .preview-toolbar {
+    display: none !important;
+  }
+
+  .app-container,
+  .app-workspace,
+  .preview-panel,
+  .preview-viewport {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    overflow: visible !important;
+    background: transparent !important;
+  }
+
+  .a4-sheet-wrapper {
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 210mm !important;
+    height: 297mm !important;
+  }
+
+  .invoice-a4 {
+    box-shadow: none !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}
+
+/* Responsive for smaller displays */
+@media (max-width: 1100px) {
+  .app-workspace {
+    grid-template-columns: 380px 1fr;
+  }
+}

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice Generator Webcare - PT. Webcare Digital Indonesia</title>
+  
+  <!-- Google Fonts: Poppins & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- html2pdf.js & html2canvas for local & reliable export -->
+  <script src="assets/html2pdf.bundle.min.js"></script>
+  <script src="assets/html2canvas.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Studio Header -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="brand-icon">
+          <img src="assets/webcare_logo.png" alt="Webcare Logo" class="brand-logo-img">
+        </div>
+        <div class="brand-text">
+          <h1>Webcare Invoice Studio</h1>
+          <span class="badge-tag">Official Template PT. Webcare Digital Indonesia</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="btn-clear-form" class="btn btn-nav-reset" title="Kosongkan Form">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+          Reset
+        </button>
+
+        <button id="btn-print" class="btn btn-nav-print" title="Cetak Dokumen (Ctrl + P)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+          Print
+        </button>
+
+        <button id="btn-download-pdf" class="btn btn-nav-pdf" title="Download File PDF">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download PDF
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-workspace">
+      <!-- Left Panel: Form Input Editor -->
+      <section class="editor-panel">
+        <div class="panel-header">
+          <h2>Form Data Invoice</h2>
+          <p class="panel-subtitle">Edit data invoice, preview akan langsung terupdate otomatis.</p>
+        </div>
+
+        <div class="editor-scroll">
+          <!-- Card 1: Metadata Invoice -->
+          <div class="card-section">
+            <div class="card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <h3>Nomor & Tanggal Invoice</h3>
+            </div>
+            <div class="form-grid grid-2">
+              <div class="form-group">
+                <label for="input-inv-number">Nomor Invoice</label>
+                <input type="text" id="input-inv-number" class="form-control" value="" placeholder="Contoh: INV04398">
+              </div>
+              <div class="form-group">
+                <label for="input-inv-date">Tanggal Invoice</label>
+                <input type="text" id="input-inv-date" class="form-control" value="" placeholder="DD/MM/YYYY">
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Informasi Kepada / Client -->
+          <div class="card-section">
+            <div class="card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <h3>Kepada (Penerima Tagihan)</h3>
+            </div>
+            <div class="form-group">
+              <label for="input-client-name">Nama Penerima</label>
+              <input type="text" id="input-client-name" class="form-control" value="" placeholder="Nama Klien">
+            </div>
+            <div class="form-group">
+              <label for="input-client-company">Nama Perusahaan / Instansi</label>
+              <input type="text" id="input-client-company" class="form-control" value="" placeholder="Nama Perusahaan">
+            </div>
+            <div class="form-group">
+              <label for="input-client-contact">No. Telepon / Email</label>
+              <input type="text" id="input-client-contact" class="form-control" value="" placeholder="+62 ... atau email@domain.com">
+            </div>
+          </div>
+
+          <!-- Card 3: Daftar Item / Jasa -->
+          <div class="card-section">
+            <div class="card-title card-title-split">
+              <div class="card-title-left">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                <h3>Daftar Item Tagihan</h3>
+              </div>
+              <button id="btn-add-item" class="btn btn-sm btn-outline-primary" type="button">
+                + Tambah Item
+              </button>
+            </div>
+
+            <div id="items-container" class="items-editor-list">
+              <!-- Item rows dynamically generated via JS -->
+            </div>
+          </div>
+
+          <!-- Card 4: Pembayaran & Nominal Dibayar -->
+          <div class="card-section highlight-card">
+            <div class="card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+              <h3>Pembayaran & Status Pelunasan</h3>
+            </div>
+
+            <div class="summary-box">
+              <div class="summary-line">
+                <span class="summary-label">Total Tagihan :</span>
+                <span id="display-subtotal" class="summary-value">Rp 0</span>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <label for="input-paid-amount">Nominal Uang yang Dibayar (Rp)</label>
+              <div class="input-prefix-wrapper">
+                <span class="input-prefix">Rp</span>
+                <input type="text" id="input-paid-amount" class="form-control input-large" value="" placeholder="0">
+              </div>
+              <small class="helper-text">Masukkan jumlah nominal yang sudah dibayarkan oleh klien.</small>
+            </div>
+
+            <!-- Quick payment buttons -->
+            <div class="quick-buttons">
+              <button type="button" class="btn-chip" id="btn-pay-full">Lunas Penuh (100%)</button>
+              <button type="button" class="btn-chip" id="btn-pay-50">DP 50%</button>
+              <button type="button" class="btn-chip" id="btn-pay-30">DP 30%</button>
+              <button type="button" class="btn-chip" id="btn-pay-zero">Belum Bayar (0)</button>
+            </div>
+
+            <!-- Real-time Status Alert -->
+            <div id="payment-status-card" class="status-card status-pending">
+              <div class="status-header">
+                <span id="status-icon" class="status-dot"></span>
+                <strong id="status-title">Status: Belum Lunas (Ada Sisa Kurang)</strong>
+              </div>
+              <div class="status-details">
+                <div class="status-row">
+                  <span>Sudah Dibayar:</span>
+                  <strong id="status-display-paid" class="text-paid">Rp 3.150.000</strong>
+                </div>
+                <div id="status-kurang-row" class="status-row">
+                  <span id="status-kurang-label">Sisa Kurang:</span>
+                  <strong id="status-display-kurang" class="text-unpaid">Rp 2.100.000</strong>
+                </div>
+              </div>
+              <p id="status-description" class="status-note">
+                Keterangan sisa tagihan <strong>Kurang Rp 2.100.000</strong> akan ditampilkan di invoice di bawah baris Sudah Di bayar.
+              </p>
+            </div>
+
+            <!-- Optional customization for label: Kurang vs Pelunasan -->
+            <div class="form-group" style="margin-top: 12px;">
+              <label for="select-kurang-label" style="font-size: 12px; color: var(--text-muted);">Format Teks Sisa Pembayaran:</label>
+              <select id="select-kurang-label" class="form-control form-control-sm">
+                <option value="Kurang" selected>Kurang (Sesuai instruksi)</option>
+                <option value="Pelunasan">Pelunasan (Sesuai sampel PDF)</option>
+                <option value="Sisa Pembayaran">Sisa Pembayaran</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Card 5: Pengaturan Template Perusahaan (Bawaan Webcare, bisa dibuka jika perlu) -->
+          <details class="card-section company-settings-card">
+            <summary class="card-title" style="cursor: pointer;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                <h3>Informasi Perusahaan & Bank (Default Webcare)</h3>
+              </div>
+              <span class="accordion-hint">Buka untuk melihat/mengubah</span>
+            </summary>
+            
+            <div class="company-fields" style="margin-top: 14px;">
+              <div class="form-group">
+                <label for="input-company-name">Nama Perusahaan</label>
+                <input type="text" id="input-company-name" class="form-control" value="PT. WEBCARE DIGITAL INDONESIA">
+              </div>
+              <div class="form-grid grid-3">
+                <div class="form-group">
+                  <label for="input-company-phone">Telepon</label>
+                  <input type="text" id="input-company-phone" class="form-control" value="+62 857-3642-6304">
+                </div>
+                <div class="form-group">
+                  <label for="input-company-email">Email</label>
+                  <input type="text" id="input-company-email" class="form-control" value="webcareidnofficial@gmail.com">
+                </div>
+                <div class="form-group">
+                  <label for="input-company-web">Website</label>
+                  <input type="text" id="input-company-web" class="form-control" value="www.webcareidn.com">
+                </div>
+              </div>
+
+              <div class="form-title-sub">Rekening Pembayaran:</div>
+              <div class="form-grid grid-3">
+                <div class="form-group">
+                  <label for="input-bank-name">Nama Bank</label>
+                  <input type="text" id="input-bank-name" class="form-control" value="Bank BCA">
+                </div>
+                <div class="form-group">
+                  <label for="input-bank-acc">Nomor Rekening</label>
+                  <input type="text" id="input-bank-acc" class="form-control" value="7205091351">
+                </div>
+                <div class="form-group">
+                  <label for="input-bank-holder">Atas Nama</label>
+                  <input type="text" id="input-bank-holder" class="form-control" value="Mohammad Farkhan">
+                </div>
+              </div>
+
+              <div class="form-title-sub">Tanda Tangan & Footer:</div>
+              <div class="form-grid grid-2">
+                <div class="form-group">
+                  <label for="input-sign-name">Nama Penandatangan</label>
+                  <input type="text" id="input-sign-name" class="form-control" value="Mohammad Farkhan">
+                </div>
+                <div class="form-group">
+                  <label for="input-sign-role">Jabatan</label>
+                  <input type="text" id="input-sign-role" class="form-control" value="Direktur">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="input-footer-address">Alamat (Footer Kiri)</label>
+                <textarea id="input-footer-address" class="form-control" rows="2">Jl. Alas Sari, GG. Alam Pesona I, Pabean, Sidoarjo&#10;Jawa Timur, 61253</textarea>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- Right Panel: Live Invoice A4 Preview -->
+      <section class="preview-panel">
+        <div class="preview-toolbar">
+          <div class="toolbar-left">
+            <span class="preview-label">Live Preview (A4 Standard)</span>
+            <span class="zoom-indicator" id="zoom-text">Fit 100%</span>
+          </div>
+          <div class="toolbar-right">
+            <button id="btn-zoom-out" class="btn-icon" title="Perkecil Preview">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+            </button>
+            <button id="btn-zoom-reset" class="btn-icon" title="Reset Ukuran">
+              100%
+            </button>
+            <button id="btn-zoom-in" class="btn-icon" title="Perbesar Preview">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+            </button>
+            <button id="btn-download-img" class="btn-icon" title="Simpan sebagai Gambar PNG">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="preview-viewport" id="preview-viewport">
+          <!-- The Exact A4 Invoice Sheet matching PDF -->
+          <div class="a4-sheet-wrapper" id="sheet-wrapper">
+            <article class="invoice-a4" id="invoice-sheet">
+              
+              <!-- 1. Top Decorative Bar (Navy) -->
+              <div class="inv-top-bar"></div>
+
+              <!-- 2. Left Decorative Accent Ribbon (Navy) -->
+              <div class="inv-left-ribbon"></div>
+
+              <!-- 3. Header: Logo & Webcare Company Details -->
+              <header class="inv-header">
+                <div class="inv-logo-box">
+                  <img src="assets/webcare_logo.png" alt="Webcare Logo" class="inv-logo-img">
+                </div>
+                <div class="inv-company-info">
+                  <div class="inv-company-title" id="preview-company-name">PT. WEBCARE DIGITAL INDONESIA</div>
+                  <div class="inv-company-item" id="preview-company-phone">+62 857-3642-6304</div>
+                  <div class="inv-company-item" id="preview-company-email">webcareidnofficial@gmail.com</div>
+                  <div class="inv-company-item" id="preview-company-web">www.webcareidn.com</div>
+                </div>
+              </header>
+
+              <!-- 4. Invoice Number, Date & Kepada Section -->
+              <section class="inv-meta-row">
+                <div class="inv-meta-left">
+                  <h2 class="inv-title">INVOICE</h2>
+                  <div class="inv-number" id="preview-inv-number">-</div>
+                  <div class="inv-date" id="preview-inv-date">-</div>
+                </div>
+
+                <div class="inv-meta-right">
+                  <div class="inv-to-label">Kepada :</div>
+                  <div class="inv-to-name" id="preview-client-name">-</div>
+                  <div class="inv-to-company" id="preview-client-company" style="display: none;"></div>
+                  <div class="inv-to-contact" id="preview-client-contact"></div>
+                </div>
+              </section>
+
+              <!-- 5. Table Items -->
+              <section class="inv-table-section">
+                <table class="inv-table">
+                  <thead>
+                    <tr>
+                      <th class="th-desc">Deskripsi</th>
+                      <th class="th-qty">Kuantitas</th>
+                      <th class="th-price">Harga</th>
+                      <th class="th-total">Jumlah</th>
+                    </tr>
+                  </thead>
+                  <tbody id="preview-items-body">
+                    <!-- Populated dynamically via JS -->
+                  </tbody>
+                </table>
+              </section>
+
+              <!-- 6. Totals & Payment Balance (Sudah Di bayar & Pelunasan/Kurang) -->
+              <section class="inv-totals-section">
+                <div class="inv-totals-grid">
+                  <div class="totals-row">
+                    <span class="totals-label">Total</span>
+                    <span class="totals-val" id="preview-total">Rp 0</span>
+                  </div>
+                  <div class="totals-row paid-row">
+                    <span class="totals-label paid-text">Sudah Di bayar</span>
+                    <span class="totals-val paid-text" id="preview-paid">Rp 0</span>
+                  </div>
+                  <!-- Kurang row: only displayed if paid < total -->
+                  <div class="totals-row unpaid-row" id="preview-kurang-row" style="display: none;">
+                    <span class="totals-label" id="preview-kurang-label">Kurang</span>
+                    <span class="totals-val" id="preview-kurang">Rp 0</span>
+                  </div>
+                </div>
+              </section>
+
+              <!-- 7. Bottom Bank Account & Signature Block -->
+              <section class="inv-bottom-section">
+                <!-- Left: Bank Information -->
+                <div class="inv-bank-box">
+                  <div class="bank-heading">PEMBAYARAN KEPADA :</div>
+                  <div class="bank-text" id="preview-bank-holder">Mohammad Farkhan</div>
+                  <div class="bank-text" id="preview-bank-name">Bank BCA</div>
+                  <div class="bank-text" id="preview-bank-acc">7205091351</div>
+                </div>
+
+                <!-- Right: Signature & Stamp Block -->
+                <div class="inv-sig-box">
+                  <div class="sig-company-title">Webcare Indonesia</div>
+                  <div class="sig-stamp-wrapper">
+                    <img src="assets/webcare_stamp.png" alt="Stempel Webcare" class="sig-stamp-img">
+                    <img src="assets/webcare_signature.png" alt="Tanda Tangan Direktur" class="sig-signature-img">
+                  </div>
+                  <div class="sig-person-name" id="preview-sign-name">Mohammad Farkhan</div>
+                  <div class="sig-person-role" id="preview-sign-role">Direktur</div>
+                </div>
+              </section>
+
+              <!-- 8. Footer (Navy bar with white text and angled cut) -->
+              <footer class="inv-footer">
+                <div class="footer-left" id="preview-footer-address">
+                  Jl. Alas Sari, GG. Alam Pesona I, Pabean, Sidoarjo<br>
+                  Jawa Timur, 61253
+                </div>
+                <div class="footer-right">
+                  <div class="footer-email-label">Email.</div>
+                  <div class="footer-email-val" id="preview-footer-email">webcareidnofficial@gmail.com</div>
+                </div>
+              </footer>
+
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
