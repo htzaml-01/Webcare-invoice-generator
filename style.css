@@ -743,28 +743,21 @@ body {
   break-inside: avoid;
 }
 
-/* 1. Top Bar (Navy #232170 with Grey Accent Polygon on Left) */
+/* 1. Top Bar (Navy #232170 with Overlapping Grey Accent Polygon) */
 .inv-top-bar {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 9.5mm; /* approx 27pt in PDF */
-  background-color: var(--inv-navy);
   z-index: 5;
   overflow: hidden;
 }
 
-.inv-top-bar::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 35mm;
+.inv-top-bar-svg {
+  width: 100%;
   height: 100%;
-  background-color: var(--inv-grey); /* #c2c2c2 matching PDF element */
-  clip-path: polygon(0 0, 33mm 0, 30.2mm 100%, 0 100%);
-  pointer-events: none;
+  display: block;
 }
 
 /* 2. Left Ribbon (Navy #232170) */
