@@ -773,25 +773,26 @@ body {
 
 /* 3. Header Section (Logo + Webcare Company Info) */
 .inv-header {
-  margin-top: 14mm;
-  padding-left: 10mm;
+  margin-top: 15mm;
+  padding-left: 17mm;
   padding-right: 21mm;
   display: flex;
   align-items: center;
-  gap: 6mm;
+  gap: 7mm;
 }
 
 .inv-logo-box {
-  width: 44mm;
+  width: 28mm;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .inv-logo-img {
   width: 100%;
-  max-width: 44mm;
-  max-height: 24mm;
+  max-width: 27mm;
+  max-height: 14mm;
   height: auto;
   object-fit: contain;
 }
