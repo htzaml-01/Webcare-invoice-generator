@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Invoice Generator Webcare - PT. Webcare Digital Indonesia</title>
+  <title>Invoice Generator</title>
   
   <!-- Google Fonts: Poppins & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,28 +22,28 @@
     <header class="app-header">
       <div class="header-brand">
         <div class="brand-icon">
-          <img src="assets/webcare_logo.png" alt="Webcare Logo" class="brand-logo-img">
+          <img src="assets/webcare_logo.png" alt="Logo" class="brand-logo-img">
         </div>
         <div class="brand-text">
-          <h1>Webcare Invoice Studio</h1>
-          <span class="badge-tag">Official Template PT. Webcare Digital Indonesia</span>
+          <h1>Invoice Generator</h1>
         </div>
       </div>
 
       <div class="header-actions">
         <button id="btn-clear-form" class="btn btn-nav-reset" title="Kosongkan Form">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
-          Reset
+          <span class="btn-text">Reset</span>
         </button>
 
         <button id="btn-print" class="btn btn-nav-print" title="Cetak Dokumen (Ctrl + P)">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
-          Print
+          <span class="btn-text">Print</span>
         </button>
 
         <button id="btn-download-pdf" class="btn btn-nav-pdf" title="Download File PDF">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download PDF
+          <span class="pdf-text-long">Download PDF</span>
+          <span class="pdf-text-short">PDF</span>
         </button>
       </div>
     </header>
@@ -82,8 +82,8 @@
                 <input type="text" id="input-inv-number" class="form-control" value="" placeholder="Contoh: INV04398">
               </div>
               <div class="form-group">
-                <label for="input-inv-date">Tanggal Invoice</label>
-                <input type="text" id="input-inv-date" class="form-control" value="" placeholder="DD/MM/YYYY">
+                <label for="input-inv-date">Tanggal Invoice (Kalender)</label>
+                <input type="date" id="input-inv-date" class="form-control" value="">
               </div>
             </div>
           </div>
@@ -102,9 +102,48 @@
               <label for="input-client-company">Nama Perusahaan / Instansi</label>
               <input type="text" id="input-client-company" class="form-control" value="" placeholder="Nama Perusahaan">
             </div>
+
+            <!-- Dropdown Pilihan Tipe Kontak: Telepon / Email -->
             <div class="form-group">
-              <label for="input-client-contact">No. Telepon / Email</label>
-              <input type="text" id="input-client-contact" class="form-control" value="" placeholder="+62 ... atau email@domain.com">
+              <label for="select-contact-type">Tipe Kontak</label>
+              <select id="select-contact-type" class="form-control">
+                <option value="phone" selected>📞 No. Telepon / WhatsApp</option>
+                <option value="email">✉️ Alamat Email</option>
+              </select>
+            </div>
+
+            <!-- Input No. Telepon dengan Kode Negara & Auto Dash (-) -->
+            <div id="contact-phone-group" class="form-group">
+              <label for="input-client-phone">No. Telepon Klien</label>
+              <div class="phone-input-group">
+                <select id="select-country-code" class="form-control country-code-select" title="Pilih Kode Negara">
+                  <option value="+62" selected>🇮🇩 +62</option>
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+65">🇸🇬 +65</option>
+                  <option value="+60">🇲🇾 +60</option>
+                  <option value="+61">🇦🇺 +61</option>
+                  <option value="+44">🇬🇧 +44</option>
+                  <option value="+81">🇯🇵 +81</option>
+                  <option value="+82">🇰🇷 +82</option>
+                  <option value="+966">🇸🇦 +966</option>
+                  <option value="+971">🇦🇪 +971</option>
+                  <option value="+86">🇨🇳 +86</option>
+                  <option value="+49">🇩🇪 +49</option>
+                  <option value="+33">🇫🇷 +33</option>
+                  <option value="+31">🇳🇱 +31</option>
+                </select>
+                <input type="tel" id="input-client-phone" class="form-control" placeholder="811-1258-853" autocomplete="tel">
+              </div>
+              <small class="helper-text">Ketik angka, tanda strip (-) otomatis ditambahkan.</small>
+            </div>
+
+            <!-- Input Email dengan Validasi Simbol @ -->
+            <div id="contact-email-group" class="form-group" style="display: none;">
+              <label for="input-client-email">Email Klien (Harus ada @)</label>
+              <input type="email" id="input-client-email" class="form-control" placeholder="contoh: client@perusahaan.com">
+              <small id="email-validation-helper" class="helper-text helper-error" style="display: none;">
+                ⚠️ Alamat email harus mengandung simbol '@'
+              </small>
             </div>
           </div>
 

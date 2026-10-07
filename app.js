@@ -10,7 +10,10 @@ const defaultState = {
   client: {
     name: '',
     company: '',
-    contact: ''
+    contactType: 'phone',
+    countryCode: '+62',
+    phone: '',
+    email: ''
   },
   items: [
     { description: '', qty: 1, price: 0 }
@@ -37,6 +40,57 @@ let currentZoom = 1.0;
 // ==========================================================================
 // Formatting Helpers
 // ==========================================================================
+
+/**
+ * Formats ISO date YYYY-MM-DD from calendar input to DD/MM/YYYY for the invoice
+ */
+function formatIsoToDisplayDate(isoDate) {
+  if (!isoDate) return '-';
+  const parts = isoDate.split('-');
+  if (parts.length === 3) {
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  }
+  return isoDate;
+}
+
+/**
+ * Automatically formats phone number with dashes (e.g. 8111258853 -> 811-1258-853)
+ */
+function formatPhoneNumber(raw) {
+  if (!raw) return '';
+  // Strip non-digits
+  let digits = raw.replace(/\D/g, '');
+  // Remove leading 0 if entered since country code is separate
+  if (digits.startsWith('0')) {
+    digits = digits.substring(1);
+  }
+  digits = digits.slice(0, 13);
+
+  if (digits.length <= 3) {
+    return digits;
+  } else if (digits.length <= 7) {
+    return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  } else if (digits.length <= 11) {
+    return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
+  } else {
+    return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7, 11)}-${digits.slice(11)}`;
+  }
+}
+
+/**
+ * Updates client contact text in invoice preview based on phone/email
+ */
+function updateClientContactPreview() {
+  if (state.client.contactType === 'phone') {
+    if (state.client.phone && state.client.phone.trim().length > 0) {
+      DOM.previewClientContact.textContent = `${state.client.countryCode} ${state.client.phone.trim()}`;
+    } else {
+      DOM.previewClientContact.textContent = '';
+    }
+  } else {
+    DOM.previewClientContact.textContent = state.client.email || '';
+  }
+}
 
 /**
  * Formats a number to Indonesian Rupiah currency string (e.g. "Rp 5.250.000")
@@ -74,7 +128,16 @@ const DOM = {
   invDate: document.getElementById('input-inv-date'),
   clientName: document.getElementById('input-client-name'),
   clientCompany: document.getElementById('input-client-company'),
-  clientContact: document.getElementById('input-client-contact'),
+  
+  // Contact Dropdown & Inputs
+  selectContactType: document.getElementById('select-contact-type'),
+  contactPhoneGroup: document.getElementById('contact-phone-group'),
+  selectCountryCode: document.getElementById('select-country-code'),
+  inputClientPhone: document.getElementById('input-client-phone'),
+  contactEmailGroup: document.getElementById('contact-email-group'),
+  inputClientEmail: document.getElementById('input-client-email'),
+  emailValidationHelper: document.getElementById('email-validation-helper'),
+
   itemsContainer: document.getElementById('items-container'),
   btnAddItem: document.getElementById('btn-add-item'),
   paidAmount: document.getElementById('input-paid-amount'),
@@ -219,9 +282,13 @@ function bindFormInputs() {
     DOM.previewInvNumber.textContent = state.invoiceNumber || '-';
   });
 
+  DOM.invDate.addEventListener('change', (e) => {
+    state.invoiceDate = e.target.value;
+    DOM.previewInvDate.textContent = formatIsoToDisplayDate(state.invoiceDate);
+  });
   DOM.invDate.addEventListener('input', (e) => {
     state.invoiceDate = e.target.value;
-    DOM.previewInvDate.textContent = state.invoiceDate || '-';
+    DOM.previewInvDate.textContent = formatIsoToDisplayDate(state.invoiceDate);
   });
 
   DOM.clientName.addEventListener('input', (e) => {
@@ -235,10 +302,55 @@ function bindFormInputs() {
     DOM.previewClientCompany.style.display = state.client.company ? 'block' : 'none';
   });
 
-  DOM.clientContact.addEventListener('input', (e) => {
-    state.client.contact = e.target.value;
-    DOM.previewClientContact.textContent = state.client.contact || '';
-  });
+  // Contact Type Dropdown
+  if (DOM.selectContactType) {
+    DOM.selectContactType.addEventListener('change', (e) => {
+      state.client.contactType = e.target.value;
+      if (state.client.contactType === 'phone') {
+        if (DOM.contactPhoneGroup) DOM.contactPhoneGroup.style.display = 'block';
+        if (DOM.contactEmailGroup) DOM.contactEmailGroup.style.display = 'none';
+      } else {
+        if (DOM.contactPhoneGroup) DOM.contactPhoneGroup.style.display = 'none';
+        if (DOM.contactEmailGroup) DOM.contactEmailGroup.style.display = 'block';
+      }
+      updateClientContactPreview();
+    });
+  }
+
+  // Country Code Dropdown
+  if (DOM.selectCountryCode) {
+    DOM.selectCountryCode.addEventListener('change', (e) => {
+      state.client.countryCode = e.target.value;
+      updateClientContactPreview();
+    });
+  }
+
+  // Phone input with auto dash (-)
+  if (DOM.inputClientPhone) {
+    DOM.inputClientPhone.addEventListener('input', (e) => {
+      const formatted = formatPhoneNumber(e.target.value);
+      state.client.phone = formatted;
+      e.target.value = formatted;
+      updateClientContactPreview();
+    });
+  }
+
+  // Email input with @ requirement validation
+  if (DOM.inputClientEmail) {
+    DOM.inputClientEmail.addEventListener('input', (e) => {
+      const val = e.target.value.trim();
+      state.client.email = val;
+
+      if (val.length > 0 && !val.includes('@')) {
+        if (DOM.emailValidationHelper) DOM.emailValidationHelper.style.display = 'block';
+        DOM.inputClientEmail.classList.add('input-invalid');
+      } else {
+        if (DOM.emailValidationHelper) DOM.emailValidationHelper.style.display = 'none';
+        DOM.inputClientEmail.classList.remove('input-invalid');
+      }
+      updateClientContactPreview();
+    });
+  }
 
   // Paid amount input with auto-formatting
   DOM.paidAmount.addEventListener('input', (e) => {
@@ -443,11 +555,11 @@ function updateCalculationsAndPreview() {
 
   // Update header and client fields in preview
   DOM.previewInvNumber.textContent = state.invoiceNumber || '-';
-  DOM.previewInvDate.textContent = state.invoiceDate || '-';
+  DOM.previewInvDate.textContent = formatIsoToDisplayDate(state.invoiceDate);
   DOM.previewClientName.textContent = state.client.name || '-';
   DOM.previewClientCompany.textContent = state.client.company || '';
   DOM.previewClientCompany.style.display = state.client.company ? 'block' : 'none';
-  DOM.previewClientContact.textContent = state.client.contact || '';
+  updateClientContactPreview();
 }
 
 /**
@@ -520,7 +632,23 @@ function syncInputsFromState() {
   DOM.invDate.value = state.invoiceDate;
   DOM.clientName.value = state.client.name;
   DOM.clientCompany.value = state.client.company;
-  DOM.clientContact.value = state.client.contact;
+
+  if (DOM.selectContactType) DOM.selectContactType.value = state.client.contactType || 'phone';
+  if (DOM.selectCountryCode) DOM.selectCountryCode.value = state.client.countryCode || '+62';
+  if (DOM.inputClientPhone) DOM.inputClientPhone.value = state.client.phone || '';
+  if (DOM.inputClientEmail) DOM.inputClientEmail.value = state.client.email || '';
+
+  if (state.client.contactType === 'email') {
+    if (DOM.contactPhoneGroup) DOM.contactPhoneGroup.style.display = 'none';
+    if (DOM.contactEmailGroup) DOM.contactEmailGroup.style.display = 'block';
+  } else {
+    if (DOM.contactPhoneGroup) DOM.contactPhoneGroup.style.display = 'block';
+    if (DOM.contactEmailGroup) DOM.contactEmailGroup.style.display = 'none';
+  }
+
+  if (DOM.emailValidationHelper) DOM.emailValidationHelper.style.display = 'none';
+  if (DOM.inputClientEmail) DOM.inputClientEmail.classList.remove('input-invalid');
+
   DOM.paidAmount.value = state.paidAmount > 0 ? formatThousand(state.paidAmount) : '';
   DOM.selectKurangLabel.value = state.kurangLabel;
 
@@ -592,13 +720,23 @@ async function downloadInvoicePDF() {
 
   const btn = DOM.btnDownloadPdf;
   const originalText = btn.innerHTML;
-  btn.innerHTML = `<span style="display:inline-block;animation:spin 1s linear infinite">⏳</span> Memproses PDF...`;
+  btn.innerHTML = `<span style="display:inline-block;animation:spin 1s linear infinite">⏳</span> Memproses...`;
   btn.disabled = true;
 
+  // Temporarily reset zoom/scale transform so html2pdf captures standard 1:1 crisp dimensions
+  const wrapper = DOM.sheetWrapper;
+  const prevTransform = wrapper ? wrapper.style.transform : '';
+  const prevMargin = wrapper ? wrapper.style.marginBottom : '';
+
   try {
-    // Generate filename
-    const sanitizedNumber = (state.invoiceNumber || 'INV').replace(/[^a-zA-Z0-9_-]/g, '_');
-    const filename = `INVOICE_WEBCARE_${sanitizedNumber}.pdf`;
+    if (wrapper) {
+      wrapper.style.transform = 'none';
+      wrapper.style.marginBottom = '0px';
+    }
+
+    // Generate clean filename
+    const sanitizedNumber = (state.invoiceNumber || 'DRAFT').replace(/[^a-zA-Z0-9_-]/g, '_');
+    const filename = `INVOICE_${sanitizedNumber}.pdf`;
 
     const opt = {
       margin: 0,
@@ -608,18 +746,34 @@ async function downloadInvoicePDF() {
         scale: 2,
         useCORS: true,
         letterRendering: true,
-        logging: false
+        logging: false,
+        scrollY: 0,
+        scrollX: 0
       },
       jsPDF: {
         unit: 'mm',
         format: 'a4',
         orientation: 'portrait'
-      }
+      },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
     };
 
     if (window.html2pdf) {
-      await html2pdf().set(opt).from(element).save();
-      showNotification(`File ${filename} berhasil diunduh!`);
+      // Generate PDF and guarantee strictly 1 page (delete any blank trailing pages)
+      await html2pdf()
+        .set(opt)
+        .from(element)
+        .toPdf()
+        .get('pdf')
+        .then((pdf) => {
+          const totalPages = pdf.internal.getNumberOfPages();
+          for (let i = totalPages; i > 1; i--) {
+            pdf.deletePage(i);
+          }
+        })
+        .save();
+
+      showNotification(`File ${filename} berhasil diunduh (1 Halaman)!`);
     } else {
       window.print();
     }
@@ -628,6 +782,10 @@ async function downloadInvoicePDF() {
     alert('Gagal mendownload PDF otomatis. Membuka dialog print browser...');
     window.print();
   } finally {
+    if (wrapper) {
+      wrapper.style.transform = prevTransform;
+      wrapper.style.marginBottom = prevMargin;
+    }
     btn.innerHTML = originalText;
     btn.disabled = false;
   }
@@ -640,23 +798,39 @@ async function downloadInvoicePNG() {
   const btn = DOM.btnDownloadImg;
   btn.disabled = true;
 
+  const wrapper = DOM.sheetWrapper;
+  const prevTransform = wrapper ? wrapper.style.transform : '';
+  const prevMargin = wrapper ? wrapper.style.marginBottom : '';
+
   try {
+    if (wrapper) {
+      wrapper.style.transform = 'none';
+      wrapper.style.marginBottom = '0px';
+    }
+
     const canvas = await html2canvas(element, {
       scale: 2,
       useCORS: true,
-      backgroundColor: '#ffffff'
+      backgroundColor: '#ffffff',
+      scrollY: 0,
+      scrollX: 0
     });
 
     const link = document.createElement('a');
-    const sanitizedNumber = (state.invoiceNumber || 'INV').replace(/[^a-zA-Z0-9_-]/g, '_');
-    link.download = `INVOICE_WEBCARE_${sanitizedNumber}.png`;
+    const sanitizedNumber = (state.invoiceNumber || 'DRAFT').replace(/[^a-zA-Z0-9_-]/g, '_');
+    link.download = `INVOICE_${sanitizedNumber}.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
-    showNotification('Gambar invoice berhasil disimpan!');
+
+    showNotification(`File ${link.download} berhasil diunduh!`);
   } catch (err) {
     console.error('Error generating PNG:', err);
-    alert('Gagal menyimpan gambar invoice.');
+    alert('Gagal membuat gambar PNG.');
   } finally {
+    if (wrapper) {
+      wrapper.style.transform = prevTransform;
+      wrapper.style.marginBottom = prevMargin;
+    }
     btn.disabled = false;
   }
 }

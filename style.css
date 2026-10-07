@@ -102,18 +102,22 @@ body {
   font-weight: 700;
   letter-spacing: -0.2px;
   color: #ffffff;
+  white-space: nowrap;
 }
 
-.badge-tag {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.85);
-  display: block;
+.pdf-text-long {
+  display: inline;
+}
+
+.pdf-text-short {
+  display: none;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 /* Navbar Buttons - High-contrast on Blue */
@@ -411,6 +415,31 @@ body {
   margin-top: 4px;
 }
 
+.helper-error {
+  color: #dc2626 !important;
+  font-weight: 600;
+}
+
+.input-invalid {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12) !important;
+}
+
+/* Phone input with country code */
+.phone-input-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.country-code-select {
+  width: 120px;
+  flex-shrink: 0;
+  font-weight: 600;
+  background-color: #f8fafc;
+  cursor: pointer;
+}
+
 .form-grid {
   display: grid;
   gap: 10px;
@@ -698,8 +727,9 @@ body {
    ========================================================================== */
 .invoice-a4 {
   width: 210mm;
-  min-height: 297mm;
-  height: 297mm;
+  min-height: 296mm;
+  height: 296mm;
+  max-height: 296mm;
   background: #ffffff;
   color: #000000;
   font-family: 'Poppins', sans-serif;
@@ -707,6 +737,10 @@ body {
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
+  page-break-after: avoid;
+  page-break-inside: avoid;
+  page-break-before: avoid;
+  break-inside: avoid;
 }
 
 /* 1. Top Bar (Navy #232170) */
@@ -1146,16 +1180,19 @@ body {
     background: #ffffff !important;
     color: #000000 !important;
     width: 210mm !important;
-    height: 297mm !important;
+    height: 296mm !important;
+    max-height: 296mm !important;
     margin: 0 !important;
     padding: 0 !important;
-    overflow: visible !important;
+    overflow: hidden !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
   /* Hide entire app UI */
   .app-header,
+  .mobile-tab-bar,
+  .mobile-floating-switch,
   .editor-panel,
   .preview-toolbar {
     display: none !important;
@@ -1169,8 +1206,9 @@ body {
     padding: 0 !important;
     margin: 0 !important;
     width: 210mm !important;
-    height: 297mm !important;
-    overflow: visible !important;
+    height: 296mm !important;
+    max-height: 296mm !important;
+    overflow: hidden !important;
     background: transparent !important;
   }
 
@@ -1179,16 +1217,21 @@ body {
     margin: 0 !important;
     padding: 0 !important;
     width: 210mm !important;
-    height: 297mm !important;
+    height: 296mm !important;
+    max-height: 296mm !important;
   }
 
   .invoice-a4 {
     box-shadow: none !important;
     width: 210mm !important;
-    height: 297mm !important;
+    height: 296mm !important;
+    max-height: 296mm !important;
     margin: 0 !important;
+    overflow: hidden !important;
     page-break-after: avoid !important;
+    page-break-before: avoid !important;
     page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 }
 
@@ -1321,8 +1364,17 @@ body {
 /* 3. Small Tablets & Phones (max-width: 768px) */
 @media (max-width: 768px) {
   .app-header {
-    padding: 0 14px;
+    padding: 0 12px;
     height: 56px;
+    gap: 8px;
+  }
+
+  .pdf-text-long {
+    display: none !important;
+  }
+
+  .pdf-text-short {
+    display: inline !important;
   }
 
   .mobile-tab-bar {
@@ -1334,13 +1386,15 @@ body {
   }
 
   .brand-icon {
-    width: 32px;
-    height: 32px;
-    padding: 4px;
+    width: 30px;
+    height: 30px;
+    padding: 3px;
+    flex-shrink: 0;
   }
 
   .brand-text h1 {
     font-size: 14px;
+    white-space: nowrap;
   }
 
   .badge-tag {
@@ -1348,13 +1402,13 @@ body {
   }
 
   .header-actions {
-    gap: 6px;
+    gap: 5px;
   }
 
   .btn {
-    padding: 7px 12px;
+    padding: 7px 10px;
     font-size: 12px;
-    gap: 5px;
+    gap: 4px;
   }
 
   /* Collapse form grids to single column for easy touch typing */
@@ -1393,39 +1447,61 @@ body {
   }
 }
 
-/* 4. Very Small Mobile Screens (max-width: 480px) */
+/* 4. Mobile Screens (max-width: 480px) */
 @media (max-width: 480px) {
   .app-header {
-    padding: 0 10px;
+    padding: 0 8px;
+    gap: 6px;
+  }
+
+  .header-brand {
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .brand-icon {
+    width: 28px;
+    height: 28px;
+    padding: 3px;
+    flex-shrink: 0;
   }
 
   .brand-text h1 {
-    font-size: 13px;
-    max-width: 140px;
+    font-size: 13.5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .btn-nav-reset span,
-  .btn-nav-print span,
-  .btn-nav-pdf span {
-    display: inline;
+  .header-actions {
+    gap: 4px;
+    flex-shrink: 0;
   }
 
   .btn-nav-reset {
-    padding: 6px 9px;
-    font-size: 11.5px;
+    padding: 6px 7px;
+    font-size: 11px;
+    gap: 4px;
   }
 
   .btn-nav-print {
-    padding: 6px 10px;
-    font-size: 11.5px;
+    padding: 6px 7px;
+    font-size: 11px;
+    gap: 4px;
   }
 
   .btn-nav-pdf {
-    padding: 6px 10px;
+    padding: 6px 9px;
     font-size: 11.5px;
+    gap: 4px;
+  }
+
+  .pdf-text-long {
+    display: none !important;
+  }
+
+  .pdf-text-short {
+    display: inline !important;
   }
 
   .mobile-tab-bar {
@@ -1450,6 +1526,27 @@ body {
 
   .preview-label {
     font-size: 11px;
+  }
+}
+
+/* 5. Ultra Small Mobile Screens (max-width: 360px) */
+@media (max-width: 360px) {
+  .brand-text h1 {
+    font-size: 12px;
+  }
+
+  .btn-nav-reset .btn-text,
+  .btn-nav-print .btn-text {
+    display: none;
+  }
+
+  .btn-nav-reset,
+  .btn-nav-print {
+    padding: 6px;
+  }
+
+  .btn-nav-pdf {
+    padding: 6px 8px;
   }
 }
 
