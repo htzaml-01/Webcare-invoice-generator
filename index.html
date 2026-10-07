@@ -159,15 +159,6 @@
               </button>
             </div>
 
-            <!-- Table Header (Blue Bar like reference image) -->
-            <div class="items-table-header">
-              <span class="th-col-desc">Deskripsi</span>
-              <span class="th-col-qty">Qty</span>
-              <span class="th-col-price">Harga (Rp)</span>
-              <span class="th-col-total">Jumlah</span>
-              <span class="th-col-action"></span>
-            </div>
-
             <div id="items-container" class="items-editor-list">
               <!-- Item rows dynamically generated via JS -->
             </div>
@@ -332,10 +323,7 @@
               
               <!-- 1. Top Decorative Bar (Navy with Taller Overlapping Grey Accent) -->
               <div class="inv-top-bar">
-                <svg class="inv-top-bar-svg" viewBox="0 0 595.5 38.33" preserveAspectRatio="none">
-                  <rect x="0" y="0" width="595.5" height="26.8" fill="#232170" />
-                  <polygon points="0,0 93.5,0 82,38.33 0,38.33" fill="#c2c2c2" />
-                </svg>
+                <img src="assets/inv_top_bar.png" alt="Top Bar" class="inv-top-bar-img">
               </div>
 
               <!-- 2. Left Decorative Accent Ribbon (Navy) -->
@@ -428,15 +416,18 @@
                 </div>
               </section>
 
-              <!-- 8. Footer (Navy bar with white text and angled cut) -->
+              <!-- 8. Footer (Navy bar with white text and grey slanted accent) -->
               <footer class="inv-footer">
-                <div class="footer-left" id="preview-footer-address">
-                  Jl. Alas Sari, GG. Alam Pesona I, Pabean, Sidoarjo<br>
-                  Jawa Timur, 61253
-                </div>
-                <div class="footer-right">
-                  <div class="footer-email-label">Email.</div>
-                  <div class="footer-email-val" id="preview-footer-email">webcareidnofficial@gmail.com</div>
+                <img src="assets/inv_footer_bg.png" alt="Footer Background" class="inv-footer-bg-img">
+                <div class="inv-footer-content">
+                  <div class="footer-left" id="preview-footer-address">
+                    Jl. Alas Sari, GG. Alam Pesona I, Pabean, Sidoarjo<br>
+                    Jawa Timur, 61253
+                  </div>
+                  <div class="footer-right">
+                    <div class="footer-email-label">Email.</div>
+                    <div class="footer-email-val" id="preview-footer-email">webcareidnofficial@gmail.com</div>
+                  </div>
                 </div>
               </footer>
 

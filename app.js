@@ -425,32 +425,19 @@ function renderItemInputs() {
     const card = document.createElement('div');
     card.className = 'item-row-card';
 
-    const qty = Number(item.qty) || 0;
-    const price = Number(item.price) || 0;
-    const lineTotal = qty * price;
-
     card.innerHTML = `
-      <div class="item-grid-desktop">
-        <div class="col-desc">
-          <input type="text" class="form-control form-control-sm item-desc-input" placeholder="Deskripsi Jasa / Produk" value="${escapeHtml(item.description)}">
+      <div class="item-row-top">
+        <input type="text" class="form-control item-desc-input" placeholder="Deskripsi Jasa / Produk" value="${escapeHtml(item.description)}">
+      </div>
+      <div class="item-row-bottom">
+        <input type="number" class="form-control item-qty-input" placeholder="Qty" min="1" value="${item.qty}">
+        <div class="input-prefix-wrapper">
+          <span class="input-prefix" style="font-size: 11px; left: 8px;">Rp</span>
+          <input type="text" class="form-control item-price-input" style="padding-left: 28px; font-size: 12px;" placeholder="Harga" value="${formatThousand(item.price)}">
         </div>
-        <div class="col-qty">
-          <input type="number" class="form-control form-control-sm item-qty-input" placeholder="Qty" min="1" value="${item.qty}">
-        </div>
-        <div class="col-price">
-          <div class="input-prefix-wrapper">
-            <span class="input-prefix" style="font-size: 10px; left: 6px;">Rp</span>
-            <input type="text" class="form-control form-control-sm item-price-input" style="padding-left: 24px; font-size: 11.5px; text-align: right;" placeholder="0" value="${formatThousand(item.price)}">
-          </div>
-        </div>
-        <div class="col-total">
-          <span class="item-line-total-badge">${formatRupiah(lineTotal)}</span>
-        </div>
-        <div class="col-action">
-          <button type="button" class="btn-remove-item" title="Hapus Item" ${state.items.length <= 1 ? 'disabled style="opacity:0.3;cursor:not-allowed;"' : ''}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          </button>
-        </div>
+        <button type="button" class="btn-remove-item" title="Hapus Item" ${state.items.length <= 1 ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : ''}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
       </div>
     `;
 
@@ -458,14 +445,7 @@ function renderItemInputs() {
     const descInput = card.querySelector('.item-desc-input');
     const qtyInput = card.querySelector('.item-qty-input');
     const priceInput = card.querySelector('.item-price-input');
-    const totalBadge = card.querySelector('.item-line-total-badge');
     const removeBtn = card.querySelector('.btn-remove-item');
-
-    function updateRowTotal() {
-      const q = Number(state.items[index].qty) || 0;
-      const p = Number(state.items[index].price) || 0;
-      if (totalBadge) totalBadge.textContent = formatRupiah(q * p);
-    }
 
     descInput.addEventListener('input', (e) => {
       state.items[index].description = e.target.value;
@@ -475,7 +455,6 @@ function renderItemInputs() {
     qtyInput.addEventListener('input', (e) => {
       const q = parseInt(e.target.value, 10) || 0;
       state.items[index].qty = q;
-      updateRowTotal();
       updateCalculationsAndPreview();
     });
 
@@ -483,7 +462,6 @@ function renderItemInputs() {
       const p = parseNumber(e.target.value);
       state.items[index].price = p;
       e.target.value = formatThousand(p);
-      updateRowTotal();
       updateCalculationsAndPreview();
     });
 
