@@ -773,12 +773,12 @@ body {
 
 /* 3. Header Section (Logo + Webcare Company Info) */
 .inv-header {
-  margin-top: 15mm;
+  margin-top: 19mm;
   padding-left: 17mm;
   padding-right: 21mm;
   display: flex;
   align-items: center;
-  gap: 7mm;
+  gap: 12mm;
 }
 
 .inv-logo-box {
@@ -791,8 +791,8 @@ body {
 
 .inv-logo-img {
   width: 100%;
-  max-width: 27mm;
-  max-height: 14mm;
+  max-width: 26mm;
+  max-height: 13mm;
   height: auto;
   object-fit: contain;
 }
@@ -821,7 +821,7 @@ body {
 
 /* 4. Invoice Number, Date & Kepada Section */
 .inv-meta-row {
-  margin-top: 14.5mm;
+  margin-top: 12mm;
   padding-left: 21mm;
   padding-right: 21mm;
   display: flex;
